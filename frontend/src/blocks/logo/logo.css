@@ -1,0 +1,24 @@
+.logo {
+  width: 142px;
+  height: 33px;
+  display: block;
+  background-image: url("../../images/mesto-logo.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  transition: opacity 0.2s ease-out;
+  cursor: pointer;
+  width: 142px;
+  height: 33px;
+}
+
+.logo:hover {
+  opacity: 0.6;
+}
+
+@media screen and (max-width: 320px) {
+  .logo {
+    width: 104px;
+    height: 25px;
+  }
+}
