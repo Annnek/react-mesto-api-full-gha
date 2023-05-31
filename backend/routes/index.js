@@ -12,6 +12,12 @@ const {
 
 const authMiddleware = require("../middlewares/auth");
 
+router.get("/crash-test", () => {
+  setTimeout(() => {
+    throw new Error("Сервер сейчас упадёт");
+  }, 0);
+});
+
 router.post("/signin", loginUserSchema, loginUser);
 router.post("/signup", registrationUserSchema, registrationUser);
 
