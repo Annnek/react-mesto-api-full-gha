@@ -1,7 +1,7 @@
 class Api {
   constructor(config) {
     this._baseUrl = config.baseUrl; //адрес сервера
-    this._headers = config.headers; //заголовки запроса
+    // this._headers = config.headers; //заголовки запроса
   }
 
   // Формирую запрос на сервер, если прошел не удачно, возвращаем ошибку!
@@ -15,88 +15,112 @@ class Api {
   }
 
   // Метод загрузки информации о пользователе с сервера
-  async getUserInfo() {
-    const response = await fetch(`${this._baseUrl}/users/me`, {
-      headers: this._headers,
-    });
-    return this._handleSendingRequest(response);
+  getUserInfo() {
+    const token = localStorage.getItem("jwt");
+    return fetch(`${this._baseUrl}/users/me`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }).then(this._handleSendingRequest);
   }
 
   // Метод загрузки карточек с сервера
-  async getInitialCards() {
-    const response = await fetch(`${this._baseUrl}/cards`, {
-      headers: this._headers,
-    });
-    return this._handleSendingRequest(response);
+  getInitialCards() {
+    const token = localStorage.getItem("jwt");
+    return fetch(`${this._baseUrl}/cards`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }).then(this._handleSendingRequest);
   }
 
   // Метод редактирование профиля
-  async setUserInfo(data) {
-    const response = await fetch(`${this._baseUrl}/users/me`, {
+  setUserInfo(data) {
+    const token = localStorage.getItem("jwt");
+    return fetch(`${this._baseUrl}/users/me`, {
       method: "PATCH",
-      headers: this._headers,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify({
         name: data.name,
         about: data.about,
       }),
-    });
-    return this._handleSendingRequest(response);
+    }).then(this._handleSendingRequest);
   }
 
   // Метод обновления аватара пользователя
-  async setUserAvatar(data) {
-    const response = await fetch(`${this._baseUrl}/users/me/avatar`, {
+  setUserAvatar(data) {
+    const token = localStorage.getItem("jwt");
+    return fetch(`${this._baseUrl}/users/me/avatar`, {
       method: "PATCH",
-      headers: this._headers,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify({
         avatar: data,
       }),
-    });
-    return this._handleSendingRequest(response);
+    }).then(this._handleSendingRequest);
   }
 
   // Метод добавления новой карточки с сервера
-  async addNewCard(data) {
-    const response = await fetch(`${this._baseUrl}/cards`, {
+  addNewCard(data) {
+    const token = localStorage.getItem("jwt");
+    return fetch(`${this._baseUrl}/cards`, {
       method: "POST",
-      headers: this._headers,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify(data),
-    });
-    return this._handleSendingRequest(response);
+    }).then(this._handleSendingRequest);
   }
 
   // Метод постановки лайка карточки
-  async changeLikeCardStatus(cardId) {
-    const response = await fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
+  changeLikeCardStatus(cardId) {
+    const token = localStorage.getItem("jwt");
+    return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
       method: "PUT",
-      headers: this._headers,
-    });
-    return this._handleSendingRequest(response);
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }).then(this._handleSendingRequest);
   }
 
   //метод удаления лайка карточки
-  async deleteLikeStatus(cardId) {
-    const response = await fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
+  deleteLikeStatus(cardId) {
+    const token = localStorage.getItem("jwt");
+    return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
       method: "DELETE",
-      headers: this._headers,
-    });
-    return this._handleSendingRequest(response);
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }).then(this._handleSendingRequest);
   }
 
   // Метод удаления карточки
-  async deleteOwnerCard(cardId) {
-    const response = await fetch(`${this._baseUrl}/cards/${cardId}`, {
+  deleteOwnerCard(cardId) {
+    const token = localStorage.getItem("jwt");
+    return fetch(`${this._baseUrl}/cards/${cardId}`, {
       method: "DELETE",
-      headers: this._headers,
-    });
-    return this._handleSendingRequest(response);
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }).then(this._handleSendingRequest);
   }
 }
 
 export const api = new Api({
-  baseUrl: "https://mesto.nomoreparties.co/v1/cohort-60",
+  baseUrl: "http://localhost:3000",
   headers: {
-    authorization: "332cdff8-dddc-4d5c-ae62-82417a8b0fdc",
+    Authorization: `Bearer ${localStorage.getItem("jwt")}`,
     "Content-Type": "application/json",
   },
 });
