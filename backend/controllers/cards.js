@@ -52,7 +52,7 @@ const deleteCard = (req, res, next) => {
       if (!deletedCard) {
         throw new NotFoundError("Карточка не найдена");
       }
-      return res.send({ data: deletedCard });
+      return res.send(deletedCard);
     })
     .catch(next);
 };
@@ -66,8 +66,9 @@ const addLikeToCard = (req, res, next) => {
     { $addToSet: { likes: userId } },
     { new: true },
   )
+    .populate("likes", "owner")
     .then((card) => {
-      if (card) return res.send({ data: card });
+      if (card) return res.send(card);
 
       throw new NotFoundError("Карточка с указанным id не найдена");
     })
@@ -89,8 +90,9 @@ const dislikeCard = (req, res, next) => {
   const { userId } = req.user;
 
   Card.findByIdAndUpdate(cardId, { $pull: { likes: userId } }, { new: true })
+    .populate("likes", "owner")
     .then((card) => {
-      if (card) return res.send({ data: card });
+      if (card) return res.send(card);
 
       throw new NotFoundError("Данные по указанному id не найдены");
     })
