@@ -1,4 +1,4 @@
-const BASE_URL = "https://api.annnek.nomoredomains.rocks/";
+const BASE_URL = "https://api.annnek.nomoredomains.rocks";
 
 function checkResponse(res) {
   if (res.ok) {
