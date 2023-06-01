@@ -13,7 +13,21 @@ const errorHandler = require("./middlewares/errorHandler");
 
 const { PORT = 3000 } = process.env;
 const app = express();
-app.use(cors());
+
+const allowedCors = [
+  "https://annnek.nomoredomains.rocks",
+  "http://annnek.nomoredomains.rocks",
+  "localhost:3000",
+  "localhost:3001",
+  "http://localhost:3000",
+  "http://localhost:3001",
+];
+
+app.use(
+  cors({
+    origin: allowedCors,
+  }),
+);
 // подключаем логгер запросов
 app.use(requestLogger);
 
