@@ -28,6 +28,10 @@ const allowedCors = [
 app.use(
   cors({
     origin: allowedCors,
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
+    allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
 

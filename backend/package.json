@@ -11,15 +11,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Annnek/react-mesto-api-full-gha.git"
+    "url": "git+https://github.com/Annnek/express-mesto-gha.git"
   },
   "keywords": [],
   "author": "Anna Nekhorosheva",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Annnek/react-mesto-api-full-gha/issues"
+    "url": "https://github.com/Annnek/express-mesto-gha/issues"
   },
-  "homepage": "https://github.com/Annnek/react-mesto-api-full-gha#readme",
+  "homepage": "https://github.com/Annnek/express-mesto-gha#readme",
   "devDependencies": {
     "eslint": "^8.39.0",
     "eslint-config-airbnb": "^19.0.4",
