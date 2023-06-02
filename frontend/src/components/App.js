@@ -58,7 +58,7 @@ function App() {
             link: card.link,
             likes: card.likes,
             owner: card.owner,
-          }))
+          })),
         );
       })
       .catch((err) => {
@@ -67,11 +67,11 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const jwt = localStorage.getItem("jwt");
+    const token = localStorage.getItem("jwt");
 
-    if (jwt) {
+    if (token) {
       auth
-        .checkToken(jwt)
+        .checkToken(token)
         .then((res) => {
           setIsLoggedIn(true);
           setEmail(res.data.email);
@@ -118,7 +118,7 @@ function App() {
         .deleteLikeStatus(card._id)
         .then((newCard) => {
           setCards((state) =>
-            state.map((item) => (item._id === card._id ? newCard : item))
+            state.map((item) => (item._id === card._id ? newCard : item)),
           );
         })
         .catch((err) => {
@@ -129,7 +129,7 @@ function App() {
         .changeLikeCardStatus(card._id)
         .then((newCard) => {
           setCards((state) =>
-            state.map((item) => (item._id === card._id ? newCard : item))
+            state.map((item) => (item._id === card._id ? newCard : item)),
           );
         })
         .catch((err) => {
