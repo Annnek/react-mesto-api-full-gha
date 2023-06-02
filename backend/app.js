@@ -30,6 +30,7 @@ app.use(
     origin: allowedCors,
   }),
 );
+
 // подключаем логгер запросов
 app.use(requestLogger);
 
