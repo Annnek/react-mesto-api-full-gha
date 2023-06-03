@@ -4,16 +4,19 @@ const express = require("express");
 
 const mongoose = require("mongoose");
 
-const helmet = require("helmet");
-
 const { errors } = require("celebrate");
 const cors = require("cors");
+
+const helmet = require("helmet");
+
 const { requestLogger, errorLogger } = require("./middlewares/logger");
 
 const routes = require("./routes/index");
 const errorHandler = require("./middlewares/errorHandler");
 
 const { PORT = 3000 } = process.env;
+mongoose.connect("mongodb://127.0.0.1:27017/mestodb");
+
 const app = express();
 
 const allowedCors = [
@@ -25,20 +28,20 @@ const allowedCors = [
   "http://localhost:3001",
 ];
 
-app.use(
-  cors({
-    origin: allowedCors,
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
-    preflightContinue: false,
-    optionsSuccessStatus: 204,
-    allowedHeaders: ["Content-Type", "Authorization"],
-  }),
-);
+const corsOptions = {
+  origin: allowedCors,
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+app.use(cors(corsOptions));
+
+// app.use(cors());
 
 // подключаем логгер запросов
 app.use(requestLogger);
-
-mongoose.connect("mongodb://127.0.0.1:27017/mestodb");
 
 app.use(helmet());
 app.use(express.json());

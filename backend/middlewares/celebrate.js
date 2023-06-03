@@ -1,5 +1,7 @@
 const { celebrate, Joi } = require("celebrate");
-const { URL_REGEX } = require("../utils/constants");
+
+const URL_REGEX =
+  /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
 
 // Схема для валидации тела запроса loginUser
 const loginUserSchema = celebrate({
