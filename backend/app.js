@@ -19,26 +19,26 @@ mongoose.connect("mongodb://127.0.0.1:27017/mestodb");
 
 const app = express();
 
-const allowedCors = [
-  "https://annnek.nomoredomains.rocks",
-  "http://annnek.nomoredomains.rocks",
-  "localhost:3000",
-  "localhost:3001",
-  "http://localhost:3000",
-  "http://localhost:3001",
-];
+// const allowedCors = [
+//   "https://annnek.nomoredomains.rocks",
+//   "http://annnek.nomoredomains.rocks",
+//   "localhost:3000",
+//   "localhost:3001",
+//   "http://localhost:3000",
+//   "http://localhost:3001",
+// ];
 
-const corsOptions = {
-  origin: allowedCors,
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
-  preflightContinue: false,
-  optionsSuccessStatus: 204,
-  allowedHeaders: ["Content-Type", "Authorization"],
-};
+// const corsOptions = {
+//   origin: allowedCors,
+//   methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+//   preflightContinue: false,
+//   optionsSuccessStatus: 204,
+//   allowedHeaders: ["Content-Type", "Authorization"],
+// };
 
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 
-// app.use(cors());
+app.use(cors());
 
 // подключаем логгер запросов
 app.use(requestLogger);
