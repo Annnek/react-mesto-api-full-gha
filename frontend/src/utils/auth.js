@@ -14,10 +14,7 @@ export const register = (email, password) => {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      email: email,
-      password: password,
-    }),
+    body: JSON.stringify({ email, password }),
   }).then(checkResponse);
 };
 
@@ -28,22 +25,19 @@ export const login = (email, password) => {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      email: email,
-      password: password,
-    }),
+    body: JSON.stringify({ email, password }),
   })
     .then(checkResponse)
     .then((data) => {
       if (data.token) {
-        localStorage.setItem("jwt", data.token);
+        localStorage.setItem("token", data.token);
         return data;
       }
     });
 };
 
-export const checkToken = () => {
-  const token = localStorage.getItem("jwt");
+export const checkToken = (token) => {
+  // const token = localStorage.getItem("jwt");
   return fetch(`${BASE_URL}/users/me`, {
     method: "GET",
     headers: {

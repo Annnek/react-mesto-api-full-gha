@@ -39,6 +39,27 @@ function App() {
   const history = useHistory();
 
   useEffect(() => {
+    const jwt = localStorage.getItem("token");
+
+    if (jwt) {
+      auth
+        .checkToken(jwt)
+        .then((res) => {
+          setIsLoggedIn(true);
+          // setEmail(res.data.email);
+          setEmail(res.email);
+          history.push("/");
+        })
+        .catch((err) => {
+          if (err.status === 401) {
+            console.log("401 — Токен не передан или передан не в том формате");
+          }
+          console.log("401 — Переданный токен некорректен");
+        });
+    }
+  }, [history]);
+
+  useEffect(() => {
     api
       .getUserInfo()
       .then((profileInfo) => setCurrentUser(profileInfo))
@@ -65,26 +86,6 @@ function App() {
         console.log(`Ошибка загрузки карточек из api: ${err}`);
       });
   }, []);
-
-  useEffect(() => {
-    const token = localStorage.getItem("jwt");
-
-    if (token) {
-      auth
-        .checkToken(token)
-        .then((res) => {
-          setIsLoggedIn(true);
-          setEmail(res.data.email);
-          history.push("/");
-        })
-        .catch((err) => {
-          if (err.status === 401) {
-            console.log("401 — Токен не передан или передан не в том формате");
-          }
-          console.log("401 — Переданный токен некорректен");
-        });
-    }
-  }, [history]);
 
   const handleEditProfileClick = () => {
     setEditProfilePopupOpen(true);
@@ -221,7 +222,7 @@ function App() {
   }
 
   function handleSignOut() {
-    localStorage.removeItem("jwt");
+    localStorage.removeItem("token");
     setIsLoggedIn(false);
     history.push("/sign-in");
   }

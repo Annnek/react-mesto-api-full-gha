@@ -1,3 +1,5 @@
+export const BASE_URL = "https://api.annnek.nomoredomains.rocks";
+
 class Api {
   constructor(config) {
     this._baseUrl = config.baseUrl; //адрес сервера
@@ -16,7 +18,7 @@ class Api {
 
   // Метод загрузки информации о пользователе с сервера
   getUserInfo() {
-    const token = localStorage.getItem("jwt");
+    const token = localStorage.getItem("token");
     return fetch(`${this._baseUrl}/users/me`, {
       headers: {
         "Content-Type": "application/json",
@@ -27,7 +29,7 @@ class Api {
 
   // Метод загрузки карточек с сервера
   getInitialCards() {
-    const token = localStorage.getItem("jwt");
+    const token = localStorage.getItem("token");
     return fetch(`${this._baseUrl}/cards`, {
       headers: {
         "Content-Type": "application/json",
@@ -38,7 +40,7 @@ class Api {
 
   // Метод редактирование профиля
   setUserInfo(data) {
-    const token = localStorage.getItem("jwt");
+    const token = localStorage.getItem("token");
     return fetch(`${this._baseUrl}/users/me`, {
       method: "PATCH",
       headers: {
@@ -54,7 +56,7 @@ class Api {
 
   // Метод обновления аватара пользователя
   setUserAvatar(data) {
-    const token = localStorage.getItem("jwt");
+    const token = localStorage.getItem("token");
     return fetch(`${this._baseUrl}/users/me/avatar`, {
       method: "PATCH",
       headers: {
@@ -62,27 +64,30 @@ class Api {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        avatar: data,
+        avatar: data.avatar,
       }),
     }).then(this._handleSendingRequest);
   }
 
   // Метод добавления новой карточки с сервера
   addNewCard(data) {
-    const token = localStorage.getItem("jwt");
+    const token = localStorage.getItem("token");
     return fetch(`${this._baseUrl}/cards`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify({
+        name: data.name,
+        link: data.link,
+      }),
     }).then(this._handleSendingRequest);
   }
 
   // Метод постановки лайка карточки
   changeLikeCardStatus(cardId) {
-    const token = localStorage.getItem("jwt");
+    const token = localStorage.getItem("token");
     return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
       method: "PUT",
       headers: {
@@ -94,7 +99,7 @@ class Api {
 
   //метод удаления лайка карточки
   deleteLikeStatus(cardId) {
-    const token = localStorage.getItem("jwt");
+    const token = localStorage.getItem("token");
     return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
       method: "DELETE",
       headers: {
@@ -106,7 +111,7 @@ class Api {
 
   // Метод удаления карточки
   deleteOwnerCard(cardId) {
-    const token = localStorage.getItem("jwt");
+    const token = localStorage.getItem("token");
     return fetch(`${this._baseUrl}/cards/${cardId}`, {
       method: "DELETE",
       headers: {
@@ -118,9 +123,9 @@ class Api {
 }
 
 export const api = new Api({
-  baseUrl: "https://api.annnek.nomoredomains.rocks",
+  baseUrl: BASE_URL,
   headers: {
-    Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
     "Content-Type": "application/json",
   },
 });
