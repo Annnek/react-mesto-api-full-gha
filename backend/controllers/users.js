@@ -54,32 +54,21 @@ function loginUser(req, res, next) {
   const { email, password } = req.body;
 
   User.findUserByCredentials(email, password)
-    .then((user) => {
-      const token = jwt.sign(
-        { _id: user._id },
-        NODE_ENV === "production" ? JWT_SECRET : "dev-secret",
-        {
-          expiresIn: "7d",
-        },
-      );
-      res.send({ token });
+    .then(({ _id: userId }) => {
+      if (userId) {
+        const token = jwt.sign(
+          { userId },
+          NODE_ENV === "production" ? JWT_SECRET : "dev-secret",
+          {
+            expiresIn: "7d",
+          },
+        );
+        return res.send({ token });
+      }
+      throw new UnauthorizedError("Неправильные почта или пароль");
     })
     .catch(next);
 }
-
-//     .then(({ _id: userId }) => {
-//       if (userId) {
-//         const token = jwt.sign({ userId }, JWT_SECRET, {
-//           expiresIn: "7d",
-//         });
-
-//         return res.send({ _id: token });
-//       }
-
-//       throw new UnauthorizedError("Неправильные почта или пароль");
-//     })
-//     .catch(next);
-// }
 
 // Контроллер для получения списка юзеров
 const getUsers = (req, res, next) => {
@@ -96,7 +85,7 @@ const getUserById = (req, res, next) => {
       if (!user) {
         throw new NotFoundError("Пользователь с таким id не найден");
       }
-      res.send({ data: user });
+      res.send(user);
     })
     .catch((err) => {
       if (err.name === "CastError") {
