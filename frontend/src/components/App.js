@@ -60,32 +60,77 @@ function App() {
   }, [history]);
 
   useEffect(() => {
-    api
-      .getUserInfo()
-      .then((profileInfo) => setCurrentUser(profileInfo))
-      .catch((err) => {
-        console.log(`Ошибка загрузки профиля из api: ${err}`);
-      });
-  }, []);
+    if (isLoggedIn) {
+      api
+        .getUserInfo()
+        .then((profileInfo) => setCurrentUser(profileInfo))
+        .catch((err) => {
+          console.log(`Ошибка загрузки профиля из api: ${err}`);
+        });
+    }
+  }, [isLoggedIn]);
 
   useEffect(() => {
-    api
-      .getInitialCards()
-      .then((data) => {
-        setCards(
-          data.map((card) => ({
-            _id: card._id,
-            name: card.name,
-            link: card.link,
-            likes: card.likes,
-            owner: card.owner,
-          })),
-        );
+    if (isLoggedIn) {
+      api
+        .getInitialCards()
+        .then((data) => {
+          setCards(
+            data.map((card) => ({
+              _id: card._id,
+              name: card.name,
+              link: card.link,
+              likes: card.likes,
+              owner: card.owner,
+            })),
+          );
+        })
+        .catch((err) => {
+          console.log(`Ошибка загрузки карточек из api: ${err}`);
+        });
+    }
+  }, [isLoggedIn]);
+
+  function handleRegisterSubmit(email, password) {
+    auth
+      .register(email, password)
+      .then((res) => {
+        setInfoToolTipPopupOpen(true);
+        setIsSuccess(true);
+        history.push("/signin");
       })
       .catch((err) => {
-        console.log(`Ошибка загрузки карточек из api: ${err}`);
+        if (err.status === 400) {
+          console.log("400 - некорректно заполнено одно из полей");
+        }
+        setInfoToolTipPopupOpen(true);
+        setIsSuccess(false);
       });
-  }, []);
+  }
+
+  function handleLoginSubmit(email, password) {
+    auth
+      .login(email, password)
+      .then((res) => {
+        localStorage.setItem("token", res.token);
+        setIsLoggedIn(true);
+        setEmail(email);
+        history.push("/");
+      })
+      .catch((err) => {
+        if (err.status === 400) {
+          console.log("400 - не передано одно из полей");
+        } else if (err.status === 401) {
+          console.log("401 - пользователь с email не найден");
+        }
+      });
+  }
+
+  function handleSignOut() {
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);
+    history.push("/signin");
+  }
 
   const handleEditProfileClick = () => {
     setEditProfilePopupOpen(true);
@@ -184,47 +229,6 @@ function App() {
       .catch((err) => {
         console.log(`Ошибка добавления нового места: ${err}`);
       });
-  }
-
-  function handleRegisterSubmit(email, password) {
-    auth
-      .register(email, password)
-      .then((res) => {
-        setInfoToolTipPopupOpen(true);
-        setIsSuccess(true);
-        history.push("/sign-in");
-      })
-      .catch((err) => {
-        if (err.status === 400) {
-          console.log("400 - некорректно заполнено одно из полей");
-        }
-        setInfoToolTipPopupOpen(true);
-        setIsSuccess(false);
-      });
-  }
-
-  function handleLoginSubmit(email, password) {
-    auth
-      .login(email, password)
-      .then((res) => {
-        localStorage.setItem("jwt", res.token);
-        setIsLoggedIn(true);
-        setEmail(email);
-        history.push("/");
-      })
-      .catch((err) => {
-        if (err.status === 400) {
-          console.log("400 - не передано одно из полей");
-        } else if (err.status === 401) {
-          console.log("401 - пользователь с email не найден");
-        }
-      });
-  }
-
-  function handleSignOut() {
-    localStorage.removeItem("token");
-    setIsLoggedIn(false);
-    history.push("/sign-in");
   }
 
   return (

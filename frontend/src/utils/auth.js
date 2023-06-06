@@ -36,8 +36,8 @@ export const login = (email, password) => {
     });
 };
 
-export const checkToken = (token) => {
-  // const token = localStorage.getItem("jwt");
+export const checkToken = () => {
+  const token = localStorage.getItem("token");
   return fetch(`${BASE_URL}/users/me`, {
     method: "GET",
     headers: {
