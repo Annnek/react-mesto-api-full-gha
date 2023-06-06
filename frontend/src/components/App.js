@@ -205,7 +205,7 @@ function App() {
       });
   }
 
-  function handleUpdateAvatar({ avatar }) {
+  function handleUpdateAvatar(avatar) {
     api
       .setUserAvatar(avatar)
       .then((userAvatar) => {
